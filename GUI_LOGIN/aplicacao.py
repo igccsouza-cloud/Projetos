@@ -1,5 +1,5 @@
-from dtanalysis.GUI_LOGIN.login_pageFE import *
-import dtanalysis.GUI_LOGIN.login_pageBE as core
+from login_pageFE import *
+import login_pageBE as core
 
 app = None
 
