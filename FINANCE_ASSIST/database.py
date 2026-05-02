@@ -43,19 +43,27 @@ def inserir_transacao(valor, fonte, data, objetivo, obs):
     conn.commit()
     conn.close()
 
-def relatorio():
+def saldo():
+
+    conn = conectar() 
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT SUM(valor) FROM transacoes")
+    resultado = cursor.fetchone()[0]
+    
+    conn.close()
+
+    return resultado if resultado else 0
+
+def buscar_transacoes():
 
     conn = conectar()
     cursor = conn.cursor()
 
     cursor.execute("SELECT valor, fonte_destino, data, objetivo, observacao FROM transacoes")
+
     dados = cursor.fetchall()
 
     conn.close()
 
-    if not dados:
-        print("Nenhuma transação registrada.")
-    
-    else:
-        for linha in dados:
-            print(linha)
+    return dados

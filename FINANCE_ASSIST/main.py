@@ -1,7 +1,7 @@
 #Este arquivo é o ponto de entrada do programa, onde o usuário escolhe o comando a ser executado (adicionar, descontar ou gerar relatório),
 #cujas funções de manipulação de dados são importadas do arquivo database.py, mantendo a lógica de negócios separada da manipulação do banco de dados.
 
-from database import inserir_transacao, relatorio, criar_tabela
+from database import inserir_transacao, criar_tabela, saldo, buscar_transacoes
 
 criar_tabela()
 
@@ -35,10 +35,36 @@ def descont():
 
 def report():
 
-    print("Relatório de transações:")
-    relatorio()
+    print("\nRelatório de transações: \n")
+    
+    dados = buscar_transacoes()
 
-cmd = input("Digite o comando (add/desconto/relatório): ").lower()
+    if not dados:
+
+        print("Nenhuma transação registrada")
+    
+    else:
+
+        for valor, fonte_destino, data, objetivo, observacao in dados:
+
+            tipo = "Entrada" if valor > 0 else "Saída"
+
+            print(f"""
+                  
+                  Tipo: {tipo}
+                  Valor: {valor:.2f}
+                  Fonte/Destino: {fonte_destino}
+                  Data: {data}
+                  Objetivo: {objetivo}
+                  Observação: {observacao}
+                  ------------------------
+                  """)
+
+def saldo():
+
+    print(f"Saldo atual: R${saldo():.2f}")
+
+cmd = input("Digite o comando (add/desconto/relatório/saldo): ").lower()
 
 print()
 
@@ -53,6 +79,18 @@ if cmd == "add":
     except Exception as e:
         print(f"Erro inesperado: {e}")
         
+if cmd == "saldo":
+
+    try:
+        saldo()
+
+    except ValueError:
+        print("Valor inválido. Digite um número.")
+
+    except Exception as e:
+        print(f"Erro inesperado: {e}")
+        
+
 elif cmd == "desconto":
 
     try:
