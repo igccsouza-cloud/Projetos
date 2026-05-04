@@ -3,6 +3,7 @@
 
 import sqlite3
 from pathlib import Path
+from datetime import datetime
 
 DB_PATH = Path(__file__).resolve().parent / "transacoes.db"
 
@@ -67,3 +68,39 @@ def buscar_transacoes():
     conn.close()
 
     return dados
+
+def buscar_transacoes_mes_atual():
+    
+    conn = conectar()
+    cursor = conn.cursor()
+    hoje = datetime.now()
+    mes_atual = hoje.month
+    ano_atual = hoje.year
+
+    transacoes_mes = []
+
+    cursor.execute("SELECT valor, fonte_destino, data, objetivo, observacao FROM transacoes")
+    dados = cursor.fetchall()
+
+    for linha in dados:
+
+        data = linha[2]
+
+        try:
+
+            data_obj = datetime.strptime(data, "%d-%m-%Y")
+            mes_sql = data_obj.month
+            ano_sql = data_obj.year
+        
+            if mes_sql == mes_atual and ano_sql == ano_atual:
+
+                transacoes_mes.append(linha)
+
+        except ValueError:
+
+            print(f"Data inválida no banco de dados: {data}. Ignorando essa transação.")
+            continue
+
+    conn.close()
+
+    return transacoes_mes

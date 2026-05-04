@@ -1,7 +1,7 @@
 #Este arquivo é o ponto de entrada do programa, onde o usuário escolhe o comando a ser executado (adicionar, descontar ou gerar relatório),
 #cujas funções de manipulação de dados são importadas do arquivo database.py, mantendo a lógica de negócios separada da manipulação do banco de dados.
 
-from database import inserir_transacao, criar_tabela, saldo, buscar_transacoes
+from database import inserir_transacao, criar_tabela, saldo, buscar_transacoes,buscar_transacoes_mes_atual
 
 criar_tabela()
 
@@ -42,6 +42,33 @@ def report():
     if not dados:
 
         print("Nenhuma transação registrada")
+    
+    else:
+
+        for valor, fonte_destino, data, objetivo, observacao in dados:
+
+            tipo = "Entrada" if valor > 0 else "Saída"
+
+            print(f"""
+                  
+                  Tipo: {tipo}
+                  Valor: {valor:.2f}
+                  Fonte/Destino: {fonte_destino}
+                  Data: {data}
+                  Objetivo: {objetivo}
+                  Observação: {observacao}
+                  ------------------------
+                  """)
+            
+def report_mes_atual():
+
+    print("\nRelatório de transações do mês atual: \n")
+    
+    dados = buscar_transacoes_mes_atual()
+
+    if not dados:
+
+        print("Nenhuma transação registrada para o mês atual.")
     
     else:
 
@@ -106,6 +133,17 @@ elif cmd == "Relatório".lower():
 
     try:
         report()
+        
+    except ValueError:
+        print("Valor inválido. Digite um número.")
+
+    except Exception as e:
+        print(f"Erro inesperado: {e}")
+
+elif cmd == "Relatório Mensal".lower():
+
+    try:
+        report_mes_atual()
         
     except ValueError:
         print("Valor inválido. Digite um número.")
