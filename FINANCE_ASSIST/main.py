@@ -1,7 +1,7 @@
 #Este arquivo é o ponto de entrada do programa, onde o usuário escolhe o comando a ser executado (adicionar, descontar ou gerar relatório),
 #cujas funções de manipulação de dados são importadas do arquivo database.py, mantendo a lógica de negócios separada da manipulação do banco de dados.
 
-from database import inserir_transacao, criar_tabela, saldo, buscar_transacoes,buscar_transacoes_mes_atual
+from database import inserir_transacao, criar_tabela, saldo, buscar_transacoes,buscar_transacoes_mes_atual, despesa_fixa
 
 criar_tabela()
 
@@ -91,6 +91,13 @@ def saldo():
 
     print(f"Saldo atual: R${saldo():.2f}")
 
+def conta_add():
+
+    destino = str(input("Informe o nome da conta fixa"))
+    valor = float(input("Digite o valor da conta"))
+
+    despesa_fixa(valor, destino)
+
 cmd = input("Digite o comando (add/desconto/relatório/saldo): ").lower()
 
 print()
@@ -152,5 +159,3 @@ elif cmd == "Relatório Mensal".lower():
         print(f"Erro inesperado: {e}")
         
 print()
-
-#curl -X POST http://76.13.226.38/:5678/webhook/webhook-whatsapp

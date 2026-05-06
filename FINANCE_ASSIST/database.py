@@ -104,3 +104,33 @@ def buscar_transacoes_mes_atual():
     conn.close()
 
     return transacoes_mes
+
+def despesa_fixa(valor, destino):
+
+    # pessoa digita o valor da conta e qual é a conta na main.py
+    # valor é retornado para aqui
+    # mais de uma conta pode existir e deve haver suporte para todas
+    # esse desconto deve ser adicionado TODOS os meses
+
+    valores = (valor)
+    destinos = (destino)
+
+    #tentar usar matriz ou primeiro a entrar primeiro a sair 
+
+    hoje = datetime.now()
+    dia = hoje.day
+
+    while True:
+
+        if dia == 1:
+
+            conn = conectar()
+            cursor = conn.cursor()
+
+            for item in valores:
+
+                cursor.execute("""INSERT INTO transacoes (valor, fonte_destino)
+                               VALUES (?,?)""", (valores, destinos))
+
+            conn.commit()
+            conn.close()
